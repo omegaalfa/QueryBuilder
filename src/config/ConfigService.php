@@ -2,6 +2,8 @@
 
 namespace src\queryBuilder\src\config;
 
+use function Core\env;
+
 class ConfigService
 {
 	/**
@@ -10,14 +12,14 @@ class ConfigService
 	public static function databaseConfig(): array
 	{
 		return [
-			'driver'    => \Core\env('DB_DRIVER'),
-			'host'      => \Core\env('DB_HOST'),
-			'database'  => \Core\env('DB_DATABASE'),
-			'port'      => \Core\env('DB_PORT'),
-			'username'  => \Core\env('DB_USERNAME'),
-			'password'  => \Core\env('DB_PASSWORD'),
-			'charset'   => \Core\env('DB_CHARSET'),
-			'collation' => \Core\env('DB_COLLATION')
+			'driver'    => env('DB_DRIVER'),
+			'host'      => env('DB_HOST'),
+			'database'  => env('DB_DATABASE'),
+			'port'      => env('DB_PORT'),
+			'username'  => env('DB_USERNAME'),
+			'password'  => env('DB_PASSWORD'),
+			'charset'   => env('DB_CHARSET'),
+			'collation' => env('DB_COLLATION')
 		];
 	}
 }
