@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace src\queryBuilder\src;
 
 use src\queryBuilder\src\config\ConfigService;
@@ -33,9 +31,9 @@ class DatabaseFactory
 					charset: $config['charset'],
 					collation: $config['collation'],
 				)
-			),
-			new Paginator(),
-			$cache
+			), new Paginator(), $cache
 		);
 	}
+
+
 }

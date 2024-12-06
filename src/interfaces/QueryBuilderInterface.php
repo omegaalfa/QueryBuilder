@@ -87,22 +87,4 @@ interface QueryBuilderInterface
 	 * @return $this
 	 */
 	public function limit(int $limit, int $offset = 0): self;
-
-	/**
-	 * @return string
-	 */
-	public function getSQL(): string;
-
-	/**
-	 * @param  string  $query
-	 * @param  array   $params
-	 *
-	 * @return $this
-	 */
-	public function raw(string $query, array $params = []): self;
-
-	/**
-	 * @return QueryResultDTO
-	 */
-	public function execute(): QueryResultDTO;
 }
