@@ -1,5 +1,8 @@
 <?php
 
+declare(strict_types=1);
+
+
 namespace Omegaalfa\queryBuilder\cache;
 
 use Redis;
@@ -8,12 +11,15 @@ use Omegaalfa\queryBuilder\interfaces\CacheInterface;
 class RedisCache implements CacheInterface
 {
 
+	private readonly Redis $redis;
+
 	/**
-	 * @param  Redis  $redis
+	 * @param  string  $host
 	 */
-	public function __construct(private readonly Redis $redis)
+	public function __construct(string $host)
 	{
-		$this->redis->connect(\Core\env('REDIS_HOST'));
+		$this->redis = new Redis();
+		$this->redis->connect($host);
 	}
 
 	/**

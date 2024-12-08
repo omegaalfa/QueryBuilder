@@ -11,24 +11,17 @@ use Omegaalfa\queryBuilder\connection\PDOConnection;
 use Omegaalfa\queryBuilder\exceptions\QueryException;
 use Omegaalfa\queryBuilder\interfaces\CacheInterface;
 use Omegaalfa\queryBuilder\interfaces\PaginatorInterface;
-
+use Omegaalfa\queryBuilder\traits\QueryBuilderCacheTrait;
 
 final class QueryBuilder extends QueryBuilderOperations
 {
+	use QueryBuilderCacheTrait;
+
 	/**
 	 * @var PDO|null
 	 */
 	private ?PDO $transaction = null;
 
-	/**
-	 * @var int
-	 */
-	private int $cacheTtl;
-
-	/**
-	 * @var string
-	 */
-	private string $cacheKey;
 
 	/**
 	 * @param  PDOConnection        $connection
@@ -40,7 +33,6 @@ final class QueryBuilder extends QueryBuilderOperations
 		private readonly PaginatorInterface $paginator,
 		private readonly ?CacheInterface $cache = null
 	) {}
-
 
 	/**
 	 * @return $this
@@ -75,64 +67,6 @@ final class QueryBuilder extends QueryBuilderOperations
 	}
 
 
-
-	/**
-	 * @param  int  $ttl
-	 *
-	 * @return $this
-	 */
-	public function cache(int $ttl = 3600): self
-	{
-		$this->cacheTtl = $ttl;
-		return $this;
-	}
-
-	/**
-	 * @return string
-	 */
-	private function generateCacheKey(): string
-	{
-		$sql = implode(' ', $this->sql);
-		return md5($sql . serialize($this->params));
-	}
-
-	/**
-	 * @param  QueryResultDTO  $result
-	 *
-	 * @return void
-	 */
-	private function saveToCache(QueryResultDTO $result): void
-	{
-		if (!isset($this->cacheTtl, $this->cacheKey) || is_null($this->cache)) {
-			return;
-		}
-
-		$this->cache->set($this->cacheKey, $result, $this->cacheTtl);
-	}
-
-	/**
-	 * @return QueryResultDTO|null
-	 */
-	private function getFromCache(): ?QueryResultDTO
-	{
-		if (!isset($this->cacheTtl) || is_null($this->cache)) {
-			return null;
-		}
-
-		$this->cacheKey = $this->generateCacheKey();
-
-		if ($this->cache->has($this->cacheKey)) {
-			$cachedResult = $this->cache->get($this->cacheKey);
-			return new QueryResultDTO(
-				data: $cachedResult['data'],
-				count: $cachedResult['count'],
-				pagination: $cachedResult['pagination']
-			);
-		}
-
-		return null;
-	}
-
 	/**
 	 * @return PDOStatement
 	 * @throws QueryException
@@ -143,7 +77,7 @@ final class QueryBuilder extends QueryBuilderOperations
 
 		foreach ($this->params as $param => $value) {
 			if (empty($value)) {
-				throw new QueryException("Campo {$param} não pode ser vazio.");
+				throw new QueryException("Field {$param} cannot be empty.");
 			}
 			$stmt->bindValue($param, $value);
 		}
@@ -164,9 +98,7 @@ final class QueryBuilder extends QueryBuilderOperations
 	private function getTotalCount(): int
 	{
 		$countQuery = clone $this;
-		$countQuery->sql = ['SELECT', 'COUNT(*) as total'];
-		$countQuery->sql[] = 'FROM';
-		$countQuery->sql[] = $this->table;
+		$countQuery->sql = ['SELECT', 'COUNT(*) as total', "FROM {$this->table}"];
 		$countQuery->orderBy = [];
 		$countQuery->limit = null;
 		$stmt = $countQuery->prepareAndExecute();
