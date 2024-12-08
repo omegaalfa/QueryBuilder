@@ -1,9 +1,9 @@
 <?php
 
-namespace src\queryBuilder\src\cache;
+namespace Omegaalfa\queryBuilder\cache;
 
 use Redis;
-use src\queryBuilder\src\interfaces\CacheInterface;
+use Omegaalfa\queryBuilder\interfaces\CacheInterface;
 
 class RedisCache implements CacheInterface
 {
@@ -35,7 +35,7 @@ class RedisCache implements CacheInterface
 	{
 		try {
 			return json_decode($this->redis->get($key), true, 512, JSON_THROW_ON_ERROR);
-		} catch(\JsonException $e) {
+		} catch (\JsonException $e) {
 		}
 	}
 
@@ -50,7 +50,7 @@ class RedisCache implements CacheInterface
 	{
 		try {
 			$this->redis->setex($key, $ttl, json_encode($value, JSON_THROW_ON_ERROR));
-		} catch(\JsonException $e) {
+		} catch (\JsonException $e) {
 		}
 	}
 

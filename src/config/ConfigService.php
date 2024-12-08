@@ -1,6 +1,6 @@
 <?php
 
-namespace src\queryBuilder\src\config;
+namespace Omegaalfa\queryBuilder\config;
 
 use function Core\env;
 

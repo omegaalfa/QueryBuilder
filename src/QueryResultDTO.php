@@ -1,9 +1,9 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 
-namespace src\queryBuilder\src;
+namespace Omegaalfa\queryBuilder;
 
 use Generator;
 
@@ -18,9 +18,7 @@ class QueryResultDTO
 		public readonly iterable $data,
 		public readonly int $count,
 		public readonly ?PaginationDTO $pagination = null
-	)
-	{
-	}
+	) {}
 
 	/**
 	 * @return Generator

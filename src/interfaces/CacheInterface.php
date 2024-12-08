@@ -1,6 +1,6 @@
 <?php
 
-namespace src\queryBuilder\src\interfaces;
+namespace Omegaalfa\queryBuilder\interfaces;
 
 interface CacheInterface
 {

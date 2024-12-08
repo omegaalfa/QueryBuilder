@@ -1,9 +1,9 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 
-namespace src\queryBuilder\src\connection;
+namespace Omegaalfa\queryBuilder\connection;
 
 class DatabaseConfig
 {
@@ -30,6 +30,5 @@ class DatabaseConfig
 		public readonly string $charset = 'utf8',
 		public readonly string $collation = 'utf8_unicode_ci',
 		public readonly ?string $prefix = null,
-	) {
-	}
+	) {}
 }

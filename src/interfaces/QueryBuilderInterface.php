@@ -1,14 +1,13 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
-namespace src\queryBuilder\src\interfaces;
+namespace Omegaalfa\queryBuilder\interfaces;
 
 
-use src\queryBuilder\src\enums\JoinType;
-use src\queryBuilder\src\enums\OrderDirection;
-use src\queryBuilder\src\enums\SqlOperator;
-use src\queryBuilder\src\QueryResultDTO;
+use Omegaalfa\queryBuilder\enums\JoinType;
+use Omegaalfa\queryBuilder\enums\OrderDirection;
+use Omegaalfa\queryBuilder\enums\SqlOperator;
 
 interface QueryBuilderInterface
 {
@@ -87,4 +86,9 @@ interface QueryBuilderInterface
 	 * @return $this
 	 */
 	public function limit(int $limit, int $offset = 0): self;
+
+	/**
+	 * @return string
+	 */
+	public function getQuerySql(): string;
 }

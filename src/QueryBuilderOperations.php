@@ -1,14 +1,14 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
-namespace src\queryBuilder\src;
+namespace Omegaalfa\queryBuilder;
 
-use src\queryBuilder\src\enums\JoinType;
-use src\queryBuilder\src\enums\OrderDirection;
-use src\queryBuilder\src\enums\SqlOperator;
-use src\queryBuilder\src\exceptions\QueryException;
-use src\queryBuilder\src\interfaces\QueryBuilderInterface;
+use Omegaalfa\queryBuilder\enums\JoinType;
+use Omegaalfa\queryBuilder\enums\OrderDirection;
+use Omegaalfa\queryBuilder\enums\SqlOperator;
+use Omegaalfa\queryBuilder\exceptions\QueryException;
+use Omegaalfa\queryBuilder\interfaces\QueryBuilderInterface;
 
 class QueryBuilderOperations implements QueryBuilderInterface
 {
@@ -65,8 +65,7 @@ class QueryBuilderOperations implements QueryBuilderInterface
 	 */
 	public function alias(string $alias): self
 	{
-		$this->sql[] = 'AS';
-		$this->sql[] = $alias;
+		$this->sql[] = "AS {$alias}";
 		return $this;
 	}
 
@@ -80,9 +79,7 @@ class QueryBuilderOperations implements QueryBuilderInterface
 	{
 		$this->resetOperationsState();
 		$this->table = $table;
-		$this->sql = ['SELECT', implode(', ', $fields)];
-		$this->sql[] = 'FROM';
-		$this->sql[] = $table;
+		$this->sql = ['SELECT', implode(', ', $fields), "FROM {$table}"];
 		return $this;
 	}
 
@@ -106,7 +103,7 @@ class QueryBuilderOperations implements QueryBuilderInterface
 			'(' . implode(', ', array_map(static fn($field) => ':' . $field, $fields)) . ')'
 		];
 
-		foreach($data as $key => $value) {
+		foreach ($data as $key => $value) {
 			$param = ':' . $key;
 			$this->params[$param] = $value;
 		}
@@ -126,7 +123,7 @@ class QueryBuilderOperations implements QueryBuilderInterface
 		$this->resetOperationsState();
 		$this->table = $table;
 		$fields = [];
-		foreach($data as $key => $value) {
+		foreach ($data as $key => $value) {
 			$param = ':' . $key;
 			$fields[] = sprintf('%s = %s', $key, $param);
 			$this->params[$param] = $value;
@@ -233,7 +230,7 @@ class QueryBuilderOperations implements QueryBuilderInterface
 	 */
 	public function having(string $column, SqlOperator $operator, mixed $value): self
 	{
-		if(empty($this->groupBy)) {
+		if (empty($this->groupBy)) {
 			throw new QueryException('HAVING clause requires GROUP BY');
 		}
 
@@ -282,5 +279,42 @@ class QueryBuilderOperations implements QueryBuilderInterface
 		$this->limit = null;
 		$this->params = [];
 		$this->sql = [];
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getQuerySql(): string
+	{
+		if ($this->joins) {
+			$this->sql[] = implode(' ', $this->joins);
+		}
+
+		if ($this->where) {
+			$this->sql[] = 'WHERE';
+			$this->sql[] = implode(' AND ', $this->where);
+		}
+
+		if ($this->groupBy) {
+			$this->sql[] = 'GROUP BY';
+			$this->sql[] = implode(', ', $this->groupBy);
+		}
+
+		if ($this->having) {
+			$this->sql[] = 'HAVING';
+			$this->sql[] = implode(' AND ', $this->having);
+		}
+
+		if ($this->orderBy) {
+			$this->sql[] = 'ORDER BY';
+			$this->sql[] = implode(', ', $this->orderBy);
+		}
+
+		if ($this->limit) {
+			$this->sql[] = 'LIMIT';
+			$this->sql[] = ':offset, :limit';
+		}
+
+		return implode(' ', $this->sql);
 	}
 }

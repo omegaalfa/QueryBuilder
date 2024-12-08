@@ -1,12 +1,12 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 
-namespace src\queryBuilder\src;
+namespace Omegaalfa\queryBuilder;
 
 
-use src\queryBuilder\src\interfaces\PaginatorInterface;
+use Omegaalfa\queryBuilder\interfaces\PaginatorInterface;
 
 final class Paginator implements PaginatorInterface
 {

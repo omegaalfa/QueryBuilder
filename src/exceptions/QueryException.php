@@ -1,9 +1,9 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 
-namespace src\queryBuilder\src\exceptions;
+namespace Omegaalfa\queryBuilder\exceptions;
 
 use Exception;
 
@@ -68,10 +68,10 @@ class QueryException extends Exception
 	public function getDetailedMessage(): string
 	{
 		$message = $this->getMessage();
-		if($this->sql) {
+		if ($this->sql) {
 			$message .= " | SQL: {$this->sql}";
 		}
-		if(!empty($this->bindings)) {
+		if (!empty($this->bindings)) {
 			$bindings = implode(', ', array_map(fn($b) => var_export($b, true), $this->bindings));
 			$message .= " | Bindings: [{$bindings}]";
 		}

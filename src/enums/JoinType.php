@@ -1,10 +1,10 @@
 <?php
 
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 
-namespace src\queryBuilder\src\enums;
+namespace Omegaalfa\queryBuilder\enums;
 
 enum JoinType: string
 {

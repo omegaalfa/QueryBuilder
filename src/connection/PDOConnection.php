@@ -1,13 +1,13 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 
-namespace src\queryBuilder\src\connection;
+namespace Omegaalfa\queryBuilder\connection;
 
 use PDO;
-use src\queryBuilder\src\exceptions\DatabaseException;
-use src\queryBuilder\src\interfaces\ConnectionInterface;
+use Omegaalfa\queryBuilder\exceptions\DatabaseException;
+use Omegaalfa\queryBuilder\interfaces\ConnectionInterface;
 
 
 final class PDOConnection implements ConnectionInterface
@@ -20,9 +20,7 @@ final class PDOConnection implements ConnectionInterface
 	/**
 	 * @param  DatabaseConfig  $config
 	 */
-	public function __construct(protected DatabaseConfig $config)
-	{
-	}
+	public function __construct(protected DatabaseConfig $config) {}
 
 
 	/**
@@ -30,7 +28,7 @@ final class PDOConnection implements ConnectionInterface
 	 */
 	public function connect(): PDO
 	{
-		if($this->connection === null) {
+		if ($this->connection === null) {
 			$dsn = sprintf(
 				'%s:host=%s;dbname=%s;port=%d;charset=%s',
 				$this->config->driver,
@@ -75,7 +73,7 @@ final class PDOConnection implements ConnectionInterface
 			$result = $callback($this->connection);
 			$this->connection?->commit();
 			return $result;
-		} catch(\Throwable $e) {
+		} catch (\Throwable $e) {
 			$this->connection?->rollBack();
 			throw new DatabaseException(
 				message: "Transaction failed: {$e->getMessage()}",

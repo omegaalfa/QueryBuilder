@@ -1,9 +1,9 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 
-namespace src\queryBuilder\src\exceptions;
+namespace Omegaalfa\queryBuilder\exceptions;
 
 use Exception;
 
@@ -45,7 +45,7 @@ class DatabaseException extends Exception
 	public function getDetailedMessage(): string
 	{
 		$message = $this->getMessage();
-		if($this->previousException) {
+		if ($this->previousException) {
 			$message .= " | Previous: {$this->previousException->getMessage()}";
 		}
 		return $message;

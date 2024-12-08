@@ -1,11 +1,11 @@
 <?php
 
-namespace src\queryBuilder\src;
+namespace Omegaalfa\queryBuilder;
 
-use src\queryBuilder\src\config\ConfigService;
-use src\queryBuilder\src\connection\DatabaseConfig;
-use src\queryBuilder\src\connection\PDOConnection;
-use src\queryBuilder\src\interfaces\CacheInterface;
+use Omegaalfa\queryBuilder\config\ConfigService;
+use Omegaalfa\queryBuilder\connection\DatabaseConfig;
+use Omegaalfa\queryBuilder\connection\PDOConnection;
+use Omegaalfa\queryBuilder\interfaces\CacheInterface;
 
 
 class DatabaseFactory
@@ -31,9 +31,9 @@ class DatabaseFactory
 					charset: $config['charset'],
 					collation: $config['collation'],
 				)
-			), new Paginator(), $cache
+			),
+			new Paginator(),
+			$cache
 		);
 	}
-
-
 }

@@ -1,11 +1,11 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 
-namespace src\queryBuilder\src\interfaces;
+namespace Omegaalfa\queryBuilder\interfaces;
 
-use src\queryBuilder\src\PaginationDTO;
+use Omegaalfa\queryBuilder\PaginationDTO;
 
 interface PaginatorInterface
 {

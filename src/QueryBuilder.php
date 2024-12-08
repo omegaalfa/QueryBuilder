@@ -1,16 +1,16 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 
-namespace src\queryBuilder\src;
+namespace Omegaalfa\queryBuilder;
 
 use PDO;
 use PDOStatement;
-use src\queryBuilder\src\connection\PDOConnection;
-use src\queryBuilder\src\exceptions\QueryException;
-use src\queryBuilder\src\interfaces\CacheInterface;
-use src\queryBuilder\src\interfaces\PaginatorInterface;
+use Omegaalfa\queryBuilder\connection\PDOConnection;
+use Omegaalfa\queryBuilder\exceptions\QueryException;
+use Omegaalfa\queryBuilder\interfaces\CacheInterface;
+use Omegaalfa\queryBuilder\interfaces\PaginatorInterface;
 
 
 final class QueryBuilder extends QueryBuilderOperations
@@ -39,8 +39,7 @@ final class QueryBuilder extends QueryBuilderOperations
 		private readonly PDOConnection $connection,
 		private readonly PaginatorInterface $paginator,
 		private readonly ?CacheInterface $cache = null
-	) {
-	}
+	) {}
 
 
 	/**
@@ -58,7 +57,7 @@ final class QueryBuilder extends QueryBuilderOperations
 	 */
 	public function commit(): void
 	{
-		if($this->transaction !== null) {
+		if ($this->transaction !== null) {
 			$this->transaction->commit();
 			$this->transaction = null;
 		}
@@ -69,48 +68,13 @@ final class QueryBuilder extends QueryBuilderOperations
 	 */
 	public function rollback(): void
 	{
-		if($this->transaction !== null) {
+		if ($this->transaction !== null) {
 			$this->transaction->rollBack();
 			$this->transaction = null;
 		}
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getSQL(): string
-	{
-		if($this->joins) {
-			$this->sql[] = implode(' ', $this->joins);
-		}
 
-		if($this->where) {
-			$this->sql[] = 'WHERE';
-			$this->sql[] = implode(' AND ', $this->where);
-		}
-
-		if($this->groupBy) {
-			$this->sql[] = 'GROUP BY';
-			$this->sql[] = implode(', ', $this->groupBy);
-		}
-
-		if($this->having) {
-			$this->sql[] = 'HAVING';
-			$this->sql[] = implode(' AND ', $this->having);
-		}
-
-		if($this->orderBy) {
-			$this->sql[] = 'ORDER BY';
-			$this->sql[] = implode(', ', $this->orderBy);
-		}
-
-		if($this->limit) {
-			$this->sql[] = 'LIMIT';
-			$this->sql[] = ':offset, :limit';
-		}
-
-		return implode(' ', $this->sql);
-	}
 
 	/**
 	 * @param  int  $ttl
@@ -139,7 +103,7 @@ final class QueryBuilder extends QueryBuilderOperations
 	 */
 	private function saveToCache(QueryResultDTO $result): void
 	{
-		if(!isset($this->cacheTtl, $this->cacheKey) || is_null($this->cache)) {
+		if (!isset($this->cacheTtl, $this->cacheKey) || is_null($this->cache)) {
 			return;
 		}
 
@@ -151,13 +115,13 @@ final class QueryBuilder extends QueryBuilderOperations
 	 */
 	private function getFromCache(): ?QueryResultDTO
 	{
-		if(!isset($this->cacheTtl) || is_null($this->cache)) {
+		if (!isset($this->cacheTtl) || is_null($this->cache)) {
 			return null;
 		}
 
 		$this->cacheKey = $this->generateCacheKey();
 
-		if($this->cache->has($this->cacheKey)) {
+		if ($this->cache->has($this->cacheKey)) {
 			$cachedResult = $this->cache->get($this->cacheKey);
 			return new QueryResultDTO(
 				data: $cachedResult['data'],
@@ -175,16 +139,16 @@ final class QueryBuilder extends QueryBuilderOperations
 	 */
 	private function prepareAndExecute(): PDOStatement
 	{
-		$stmt = $this->connection->connect()->prepare($this->getSQL());
+		$stmt = $this->connection->connect()->prepare($this->getQuerySql());
 
-		foreach($this->params as $param => $value) {
-			if(empty($value)) {
+		foreach ($this->params as $param => $value) {
+			if (empty($value)) {
 				throw new QueryException("Campo {$param} não pode ser vazio.");
 			}
 			$stmt->bindValue($param, $value);
 		}
 
-		if($this->limit) {
+		if ($this->limit) {
 			$stmt->bindValue(':offset', $this->limit[1], PDO::PARAM_INT);
 			$stmt->bindValue(':limit', $this->limit[0], PDO::PARAM_INT);
 		}
@@ -218,7 +182,7 @@ final class QueryBuilder extends QueryBuilderOperations
 	public function execute(): QueryResultDTO
 	{
 		try {
-			if($cached = $this->getFromCache()) {
+			if ($cached = $this->getFromCache()) {
 				$this->resetOperationsState();
 				return $cached;
 			}
@@ -226,7 +190,7 @@ final class QueryBuilder extends QueryBuilderOperations
 			$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			$count = $stmt->rowCount();
 			$pagination = null;
-			if($this->limit) {
+			if ($this->limit) {
 				$total = $this->getTotalCount();
 				$pagination = $this->paginator->paginate(
 					total: $total,
@@ -238,7 +202,7 @@ final class QueryBuilder extends QueryBuilderOperations
 			$this->saveToCache($result);
 			$this->resetOperationsState();
 			return $result;
-		} catch(\PDOException $e) {
+		} catch (\PDOException $e) {
 			throw new QueryException(
 				message: "Query execution failed: {$e->getMessage()}",
 				code: (int)$e->getCode(),
