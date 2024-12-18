@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace Omegaalfa\queryBuilder\enums;
+namespace Omegaalfa\QueryBuilder\enums;
 
 enum SqlOperator: string
 {

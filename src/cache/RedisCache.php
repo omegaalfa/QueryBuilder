@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace Omegaalfa\queryBuilder\cache;
+namespace Omegaalfa\QueryBuilder\cache;
 
 use Redis;
 use Omegaalfa\queryBuilder\interfaces\CacheInterface;

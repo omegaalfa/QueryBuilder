@@ -1,9 +1,9 @@
 <?php
 
-namespace Omegaalfa\queryBuilder\traits;
+namespace Omegaalfa\QueryBuilder\traits;
 
-use Omegaalfa\queryBuilder\QueryBuilder;
-use Omegaalfa\queryBuilder\QueryResultDTO;
+use Omegaalfa\QueryBuilder\QueryBuilder;
+use Omegaalfa\QueryBuilder\QueryResultDTO;
 
 trait QueryBuilderCacheTrait
 {

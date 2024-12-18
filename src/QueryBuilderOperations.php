@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Omegaalfa\queryBuilder;
+namespace Omegaalfa\QueryBuilder;
 
-use Omegaalfa\queryBuilder\enums\JoinType;
-use Omegaalfa\queryBuilder\enums\OrderDirection;
-use Omegaalfa\queryBuilder\enums\SqlOperator;
-use Omegaalfa\queryBuilder\exceptions\QueryException;
-use Omegaalfa\queryBuilder\interfaces\QueryBuilderInterface;
+use Omegaalfa\QueryBuilder\enums\JoinType;
+use Omegaalfa\QueryBuilder\enums\OrderDirection;
+use Omegaalfa\QueryBuilder\enums\SqlOperator;
+use Omegaalfa\QueryBuilder\exceptions\QueryException;
+use Omegaalfa\QueryBuilder\interfaces\QueryBuilderInterface;
 
 class QueryBuilderOperations implements QueryBuilderInterface
 {
@@ -58,6 +58,7 @@ class QueryBuilderOperations implements QueryBuilderInterface
 	 */
 	protected string|null $table = null;
 
+
 	/**
 	 * @param  string  $alias
 	 *
@@ -68,6 +69,7 @@ class QueryBuilderOperations implements QueryBuilderInterface
 		$this->sql[] = "AS {$alias}";
 		return $this;
 	}
+
 
 	/**
 	 * @param  string  $table
@@ -249,6 +251,7 @@ class QueryBuilderOperations implements QueryBuilderInterface
 	public function limit(int $limit, int $offset = 0): self
 	{
 		$this->limit = [$limit, $offset];
+
 		return $this;
 	}
 
@@ -286,35 +289,31 @@ class QueryBuilderOperations implements QueryBuilderInterface
 	 */
 	public function getQuerySql(): string
 	{
+		$query = $this->sql;
 		if ($this->joins) {
-			$this->sql[] = implode(' ', $this->joins);
+			$query[] = implode(' ', $this->joins);
 		}
 
 		if ($this->where) {
-			$this->sql[] = 'WHERE';
-			$this->sql[] = implode(' AND ', $this->where);
+			$query[] = 'WHERE ' . implode(' AND ', $this->where);
 		}
 
 		if ($this->groupBy) {
-			$this->sql[] = 'GROUP BY';
-			$this->sql[] = implode(', ', $this->groupBy);
+			$query[] = 'GROUP BY ' . implode(', ', $this->groupBy);
 		}
 
 		if ($this->having) {
-			$this->sql[] = 'HAVING';
-			$this->sql[] = implode(' AND ', $this->having);
+			$query[] = 'HAVING ' . implode(' AND ', $this->having);
 		}
 
 		if ($this->orderBy) {
-			$this->sql[] = 'ORDER BY';
-			$this->sql[] = implode(', ', $this->orderBy);
+			$query[] = 'ORDER BY ' . implode(', ', $this->orderBy);
 		}
 
 		if ($this->limit) {
-			$this->sql[] = 'LIMIT';
-			$this->sql[] = ':offset, :limit';
+			$query[] = "LIMIT {$this->limit[1]} , {$this->limit[0]}";
 		}
 
-		return implode(' ', $this->sql);
+		return implode(' ', $query);
 	}
 }

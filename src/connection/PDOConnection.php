@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 
-namespace Omegaalfa\queryBuilder\connection;
+namespace Omegaalfa\QueryBuilder\connection;
 
 use PDO;
-use Omegaalfa\queryBuilder\exceptions\DatabaseException;
-use Omegaalfa\queryBuilder\interfaces\ConnectionInterface;
+use Omegaalfa\QueryBuilder\exceptions\DatabaseException;
+use Omegaalfa\QueryBuilder\interfaces\ConnectionInterface;
 
 
 final class PDOConnection implements ConnectionInterface

@@ -3,15 +3,15 @@
 declare(strict_types=1);
 
 
-namespace Omegaalfa\queryBuilder;
+namespace Omegaalfa\QueryBuilder;
 
 use PDO;
 use PDOStatement;
-use Omegaalfa\queryBuilder\connection\PDOConnection;
-use Omegaalfa\queryBuilder\exceptions\QueryException;
-use Omegaalfa\queryBuilder\interfaces\CacheInterface;
-use Omegaalfa\queryBuilder\interfaces\PaginatorInterface;
-use Omegaalfa\queryBuilder\traits\QueryBuilderCacheTrait;
+use Omegaalfa\QueryBuilder\connection\PDOConnection;
+use Omegaalfa\QueryBuilder\exceptions\QueryException;
+use Omegaalfa\QueryBuilder\interfaces\CacheInterface;
+use Omegaalfa\QueryBuilder\interfaces\PaginatorInterface;
+use Omegaalfa\QueryBuilder\traits\QueryBuilderCacheTrait;
 
 final class QueryBuilder extends QueryBuilderOperations
 {
@@ -74,20 +74,15 @@ final class QueryBuilder extends QueryBuilderOperations
 	private function prepareAndExecute(): PDOStatement
 	{
 		$stmt = $this->connection->connect()->prepare($this->getQuerySql());
-
 		foreach ($this->params as $param => $value) {
 			if (empty($value)) {
-				throw new QueryException("Field {$param} cannot be empty.");
+				throw new QueryException("Campo {$param} não pode ser vazio.");
 			}
 			$stmt->bindValue($param, $value);
 		}
 
-		if ($this->limit) {
-			$stmt->bindValue(':offset', $this->limit[1], PDO::PARAM_INT);
-			$stmt->bindValue(':limit', $this->limit[0], PDO::PARAM_INT);
-		}
-
 		$stmt->execute();
+		$this->resetOperationsState();
 		return $stmt;
 	}
 
@@ -132,7 +127,6 @@ final class QueryBuilder extends QueryBuilderOperations
 			}
 			$result = new QueryResultDTO($data, $count, $pagination);
 			$this->saveToCache($result);
-			$this->resetOperationsState();
 			return $result;
 		} catch (\PDOException $e) {
 			throw new QueryException(

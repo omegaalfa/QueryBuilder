@@ -2,15 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Omegaalfa\queryBuilder\interfaces;
+namespace Omegaalfa\QueryBuilder\interfaces;
 
 
-use Omegaalfa\queryBuilder\enums\JoinType;
-use Omegaalfa\queryBuilder\enums\OrderDirection;
-use Omegaalfa\queryBuilder\enums\SqlOperator;
+use Omegaalfa\QueryBuilder\enums\JoinType;
+use Omegaalfa\QueryBuilder\enums\OrderDirection;
+use Omegaalfa\QueryBuilder\enums\SqlOperator;
 
 interface QueryBuilderInterface
 {
+	/**
+	 * @param  string  $alias
+	 *
+	 * @return $this
+	 */
+	public function alias(string $alias): self;
+
 	/**
 	 * @param  string  $table
 	 * @param  array   $fields

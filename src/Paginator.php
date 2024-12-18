@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 
-namespace Omegaalfa\queryBuilder;
+namespace Omegaalfa\QueryBuilder;
 
 
-use Omegaalfa\queryBuilder\interfaces\PaginatorInterface;
+use Omegaalfa\QueryBuilder\interfaces\PaginatorInterface;
 
 final class Paginator implements PaginatorInterface
 {

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace Omegaalfa\queryBuilder\connection;
+namespace Omegaalfa\QueryBuilder\connection;
 
 class DatabaseConfig
 {

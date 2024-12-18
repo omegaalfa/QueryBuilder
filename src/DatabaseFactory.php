@@ -1,11 +1,11 @@
 <?php
 
-namespace Omegaalfa\queryBuilder;
+namespace Omegaalfa\QueryBuilder;
 
-use Omegaalfa\queryBuilder\config\ConfigService;
-use Omegaalfa\queryBuilder\connection\DatabaseConfig;
-use Omegaalfa\queryBuilder\connection\PDOConnection;
-use Omegaalfa\queryBuilder\interfaces\CacheInterface;
+use Omegaalfa\QueryBuilder\config\ConfigService;
+use Omegaalfa\QueryBuilder\connection\DatabaseConfig;
+use Omegaalfa\QueryBuilder\connection\PDOConnection;
+use Omegaalfa\QueryBuilder\interfaces\CacheInterface;
 
 
 class DatabaseFactory

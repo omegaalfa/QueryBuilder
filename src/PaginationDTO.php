@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace Omegaalfa\queryBuilder;
+namespace Omegaalfa\QueryBuilder;
 
 final class PaginationDTO
 {

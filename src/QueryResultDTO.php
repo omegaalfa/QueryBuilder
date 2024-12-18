@@ -3,9 +3,10 @@
 declare(strict_types=1);
 
 
-namespace Omegaalfa\queryBuilder;
+namespace Omegaalfa\QueryBuilder;
 
 use Generator;
+use Omegaalfa\QueryBuilder\PaginationDTO;
 
 class QueryResultDTO
 {
